@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>OWASPTop10_1_InjectionController</members>
+        <members>OWASP_10_URF_Controller</members>
+        <members>OWASP_1_Injection_Controller</members>
+        <members>OWASP_3_XSS_Controller</members>
+        <members>OWASP_4_DOR_Controller</members>
+        <members>OWASP_6_SDE_Controller</members>
+        <members>OWASP_8_CSRF_Controller</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>OWASP_10_URF</members>
+        <members>OWASP_1_Injection</members>
+        <members>OWASP_3_XSS</members>
+        <members>OWASP_4_DOR</members>
+        <members>OWASP_6_SDE</members>
+        <members>OWASP_8_CSRF</members>
+        <name>ApexPage</name>
+    </types>
+    <types>
+        <members>Order__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>jquery191</members>
+        <name>StaticResource</name>
+    </types>
+    <version>30.0</version>
+</Package>

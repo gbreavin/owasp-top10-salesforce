@@ -1,0 +1,23 @@
+<apex:page showHeader="false" sidebar="false" controller="OWASP_6_SDE_Controller">
+	<!-- 
+		This is intended to be a login page for a Site that customers use to authenticate
+		themselves. The vulnerability is not so much in the page, more in the fact that
+		there are Username and Password text fields on the Contact that are used to store
+		the users credentials (the idea being that this page's controller checks the details 
+		entered here against the corresponding user record). Whilst these can be hidden from 
+		users, plain text fields are still visible to admins. If that doesn't sound too bad, 
+		how would you feel if someone knew your email address and your password for their site 
+		if you'd reused that password elsewhere?
+
+		The controller also logs the values entered in the fields, this is also A Bad Thing.
+	-->
+	<apex:form id="theForm">
+		Username: <apex:inputText value="{!username}"/><br/>
+		Password: <apex:inputSecret value="{!password}"/><br/>
+		<apex:commandButton value="Login!" action="{!login}" rerender="theForm" /><p/>
+
+		<apex:outputPanel rendered="{!result != null}">
+			Result: {!result}
+		</apex:outputPanel>
+	</apex:form>
+</apex:page>

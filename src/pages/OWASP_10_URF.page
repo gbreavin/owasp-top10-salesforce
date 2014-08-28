@@ -1,0 +1,28 @@
+<apex:page showHeader="true" sidebar="true" controller="OWASP_10_URF_Controller">
+	<!-- 
+		The idea of this page is that it would be used to display an address on a 
+		map - it doesn't actually do that, but such a page might be useful for
+		addresses on any number of records - Account, Contact, Order, etc. Custom
+		buttons on page layouts for those objects could launch this page, pass in
+		an address to be mapped. Where the user should be taken by the button 
+		afterwards will vary depending on where the user came from.
+
+		Because of this, the developer decided to determine where the user should
+		be sent when they click "Return to Record" via a URL parameter - on each
+		button, they could set what the return URL would be.
+
+		No validation is done, however, of the URL. So Mallory could send Alice a
+		link via email that would re-direct to a page loaded with malware, 
+		infecting Alice's computer.
+
+		This could be avoided with more thought given to checking the URL, or 
+		maintaining a map of valid values that correspond to whitelisted URLs, 
+		with a sensible default (e.g. /home/home.jsp) if a value isn't 
+		recognised - see OWASP_10_URF_Controller for an example.
+	-->
+	<apex:form >
+		<apex:commandButton value="Return to record" action="{!returnToRecord}"/>
+	</apex:form>
+	<br/>
+	Interactive Google Map showing address of an Account, Contact, Order, etc.
+</apex:page>

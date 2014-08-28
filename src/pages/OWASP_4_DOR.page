@@ -1,0 +1,42 @@
+<apex:page showHeader="false" sidebar="false" controller="OWASP_4_DOR_Controller">
+	<!-- 
+		Page that shows details of an Order (custom object). The order that is shown 
+		is determined by a URL parameter - the order number is used to lookup the
+		corresponding order.
+
+		The idea behind this page is to have a page a Customer could use to see 
+		details about one of their orders, e.g. when they place an order, they 
+		receive an email with a link to this page with the corresponding order
+		number populated. Intended use of this page is along the lines of:
+		/apex/OWASP_4_DOR?order_number=ON-0000
+
+		The issue is that the page is intended to be put onto a public website
+		without any authentication (let's say this it to avoid the additional
+		licensing costs), and therefore no record access control. The company have
+		assumed that people will only follow links in the email they receive. 
+		However, all it takes is a savvy customer to follow a link, notice they've 
+		not had to authenticate to view this information, and wonder what happens 
+		if they change the value of the URL parameter - so they decrease the number 
+		by 1, and see information about an Orderthat belongs to someone else.
+
+		If this sounds unlikely or implausible, see this recent (July 2014) 
+		cautionary tale: http://grahamcluley.com/2014/07/hotel-hippo-goodbye/
+
+		Using the Salesforce record ID should not be considered a fix here. Though
+		not as easily guessable, record IDs follow a particular format, so a script 
+		to generate possible record IDs, trying them and tracking which ones work is
+		relatively trivial. See OWASP_4_DOR_Controller for further discussion on
+		avoiding this.
+	-->
+	<h1>Site Branding</h1><p/>
+
+	<h2>Order Detail:</h2><p/>
+
+	<b>Customer</b>: {!order.Customer__r.Name}<br/>
+	<b>Order Number</b>: {!order.Name}<br/>
+	<b>Going to</b>: {!order.Address__c}<br/>
+	<b>Product purchased</b>: {!order.Product_Purchased__r.Name}<br/>
+	<b>Price paid</b>: {!order.Price_Paid__c}<br/>
+	<b>Order status</b>: {!order.Status__c}<br/>
+
+</apex:page>

@@ -1,0 +1,52 @@
+<apex:page showHeader="true" sidebar="true" standardController="Order__c" 
+	extensions="OWASP_8_CSRF_Controller" action="{!setOrderToShipped}">
+	<!-- 
+		Examples usage: /apex/OWASP_8_CSRF?id=<OrderRecordID> - once the page executes, the
+		Order identified in the parameter has its Status marked as Paid.
+
+		This page demonstrates CSRF on a Visualforce page. This page was created to allow
+		a Custom Button on a detail page to be used to easily mark a record as 'Paid'. The
+		page simply executes a method in the controller to update the record and then 
+		redirects the user back to the record. The user does not need to do anything on this
+		page, and to the server it is a simple GET request; when that happens, the page action
+		(setOrderToShipped) executes, udpates the record job done.
+
+		The issue here is that there are a number of ways of getting a logged-in user's 
+		browser to request this page from the server, and update the record. A scenario here
+		helps. Customers place Orders, and they are created in a Status of Ordered. A
+		CSR contacts the customer for payment, and then uses the button (which in turn uses
+		this page) to update the record as paid.
+
+		In this company, internal staff can also be customers. The company have measures in 
+		place to ensure that internal staff cannot update their own orders as Paid.
+
+		An employee (Mallory) places an order and receives a Thank You For Your Order email  
+		that includes the Order ID (for example, in a URL for a 'Track My Order' type page). 
+		As an employee, he notices that when he clicks the button on Orders he handles, he's
+		redirected briefly to a page and then comes back to the detail page. He recognises
+		this may be vulnerable to a CSRF attack.
+
+		He uses the browser on one of the orders he can mark as paid to determine the URL 
+		whilst taking payment from a customer. He then swaps out the ID of the customer's
+		record for his own. Accessing the page directly himself won't work, and if it did, he'd
+		show up as editing the record.
+
+		Instead, he creates an email for Alice, someone who does the job as Mallory. In the
+		email, he adds HTML markup for an image tag where the source is set to the URL of the
+		page with his order's ID e.g.
+
+		<img src="http://ap1.salesforce.com/apex/OWASP_8_CSRF?id=<MallorysOrderID>"/>
+
+		Alice receives the email, and opens it. The image element won't load anything, but the
+		email client will request the address. As Alice is logged-in in another tab, Salesforce
+		treates this request as if Alice had clicked the button herself. The order is marked as 
+		paid without Alice's knowledge, and without Mallory paying for it.
+
+		Protection against this is to prompt for user input to confirm the action, and/or 
+		avoid Page actions and Controller constructor's that modify data. Prompting for
+		confirmation requires a form, and the Force.com platform has anti-CSRF protection 
+		for POST requests - but not for GET. In some cases, this may actually be what's needed, 
+		but care should be taken.
+		
+	-->	
+</apex:page>
