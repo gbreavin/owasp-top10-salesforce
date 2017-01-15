@@ -30,4 +30,5 @@ Generally speaking, some of the vulnerabilities don't apply to the Force.com pla
 Some vulnerabilities relate more to sharing and security setup within Salesforce.com. Capturing such examples in metadata is pretty laborious, for little gain. Therefore, the focus of this repo is to capture examples that require code.
 
 **Aren't these examples a little 'out there'?**
+
 The word I used when presenting this was 'tortured'. However, the examples are supposed to give enough context to highlight the vulnerabilities without needing to be overly specific and detailed. The point is not to consider these threats when you're making an application in the same context of the scenario explained above, but to consider these threats whenever or wherever they may rear their head. The details of a more realistic example would possibly get in the way of the core points of each vulnerability.
