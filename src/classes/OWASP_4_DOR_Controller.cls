@@ -3,7 +3,7 @@
 	vulnerability - see the page markup for explanation of the scenario and how it exhibits
 	the problem.
 */
-public with sharing class OWASP_4_DOR_Controller {
+public without sharing class OWASP_4_DOR_Controller {
 	public Order__c order {get; private set;}
 
 	public OWASP_4_DOR_Controller() {
